@@ -5,14 +5,15 @@ import { SchoolProfileTab } from './tabs/SchoolProfileTab';
 import { AcademicsTab } from './tabs/AcademicsTab';
 import { ClassesTab } from './tabs/ClassesTab';
 import { StudentsTab } from './tabs/StudentsTab';
-import { CompetencesTab } from './tabs/CompetencesTab';
-import { SubjectsTab } from './tabs/SubjectsTab';
 import { EvaluationTypesTab } from './tabs/EvaluationTypesTab';
-import { MaxMarksTab } from './tabs/MaxMarksTab';
-import { EvalConfigTab } from './tabs/EvalConfigTab';
 import { AppreciationRulesTab } from './tabs/AppreciationRulesTab';
 import { SqlSchemaTab } from './tabs/SqlSchemaTab';
 import { UnitTestsTab } from './tabs/UnitTestsTab';
+import { HierarchyTab } from './tabs/HierarchyTab';
+import { SubjectsSubSubjectsTab } from './tabs/SubjectsSubSubjectsTab';
+import { ClassCompetenceConfigTab } from './tabs/ClassCompetenceConfigTab';
+import { MaxMarksConfigTab } from './tabs/MaxMarksConfigTab';
+import { AssessmentPreviewTab } from './tabs/AssessmentPreviewTab';
 
 export const Dashboard: React.FC = () => {
   const { activeTab } = useApp();
@@ -20,18 +21,19 @@ export const Dashboard: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'profile': return <SchoolProfileTab />;
+      case 'hierarchy': return <HierarchyTab />;
+      case 'subjects': return <SubjectsSubSubjectsTab />;
+      case 'classconfigs': return <ClassCompetenceConfigTab />;
+      case 'maxmarks': return <MaxMarksConfigTab />;
+      case 'preview': return <AssessmentPreviewTab />;
       case 'academics': return <AcademicsTab />;
       case 'classes': return <ClassesTab />;
       case 'students': return <StudentsTab />;
-      case 'competences': return <CompetencesTab />;
-      case 'subjects': return <SubjectsTab />;
       case 'evaluation': return <EvaluationTypesTab />;
-      case 'maxmarks': return <MaxMarksTab />;
-      case 'evalconfig': return <EvalConfigTab />;
       case 'appreciation': return <AppreciationRulesTab />;
       case 'sql': return <SqlSchemaTab />;
       case 'tests': return <UnitTestsTab />;
-      default: return <SchoolProfileTab />;
+      default: return <HierarchyTab />;
     }
   };
 

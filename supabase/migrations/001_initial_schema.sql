@@ -1,5 +1,5 @@
 -- ====================================================================
--- MARKSCAM POSTGRESQL / SUPABASE INITIAL SCHEMA MIGRATION (Phase 1)
+-- MARKSCAM POSTGRESQL / SUPABASE PHASE 2 SCHEMA MIGRATION
 -- ====================================================================
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -102,11 +102,11 @@ CREATE TABLE students (
     CONSTRAINT unique_admission_per_school UNIQUE (school_id, admission_number)
 );
 
--- 8. COMPETENCES
+-- 8. COMPETENCES (Six Top-Level Competences)
 CREATE TABLE competences (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
-    code VARCHAR(50) NOT NULL,
+    code VARCHAR(50) NOT NULL, -- C1 to C6
     name_en VARCHAR(255) NOT NULL,
     name_fr VARCHAR(255) NOT NULL,
     description_en TEXT,
@@ -116,10 +116,38 @@ CREATE TABLE competences (
     CONSTRAINT unique_competence_code_per_school UNIQUE (school_id, code)
 );
 
--- 9. SUBJECTS
+-- 9. COMPETENCE ITEMS (Sub-competences)
+CREATE TABLE competence_items (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    competence_id UUID NOT NULL REFERENCES competences(id) ON DELETE CASCADE,
+    school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    code VARCHAR(50) NOT NULL, -- C1A, C1B, C1C, C2A, C2B, C3A, C3B, C4A, C4B, C5, C6A1, C6A2, C6B
+    name_en VARCHAR(255) NOT NULL,
+    name_fr VARCHAR(255) NOT NULL,
+    description_en TEXT,
+    description_fr TEXT,
+    order_index INT NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    CONSTRAINT unique_competence_item_code_per_school UNIQUE (school_id, code)
+);
+
+-- 10. CLASS COMPETENCE ITEM CONFIGURATIONS
+CREATE TABLE class_competence_item_configurations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    class_id UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    competence_item_id UUID NOT NULL REFERENCES competence_items(id) ON DELETE CASCADE,
+    is_active BOOLEAN DEFAULT TRUE,
+    order_index INT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 11. SUBJECTS
 CREATE TABLE subjects (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    competence_item_id UUID NOT NULL REFERENCES competence_items(id) ON DELETE RESTRICT,
     code VARCHAR(50) NOT NULL,
     name_en VARCHAR(255) NOT NULL,
     name_fr VARCHAR(255) NOT NULL,
@@ -131,7 +159,22 @@ CREATE TABLE subjects (
     CONSTRAINT unique_subject_code_per_school UNIQUE (school_id, code)
 );
 
--- 10. EVALUATION TYPES
+-- 12. SUB-SUBJECTS
+CREATE TABLE sub_subjects (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    subject_id UUID NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    competence_item_id UUID NOT NULL REFERENCES competence_items(id) ON DELETE RESTRICT,
+    code VARCHAR(50) NOT NULL,
+    name_en VARCHAR(255) NOT NULL,
+    name_fr VARCHAR(255) NOT NULL,
+    short_name_en VARCHAR(50) NOT NULL,
+    short_name_fr VARCHAR(50) NOT NULL,
+    order_index INT NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- 13. EVALUATION TYPES
 CREATE TABLE evaluation_types (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
@@ -143,7 +186,7 @@ CREATE TABLE evaluation_types (
     is_active BOOLEAN DEFAULT TRUE
 );
 
--- 11. APPRECIATION RULES
+-- 14. APPRECIATION RULES
 CREATE TABLE appreciation_rules (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,

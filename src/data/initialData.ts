@@ -7,11 +7,14 @@ import {
   SchoolClass,
   Student,
   Competence,
+  CompetenceItem,
   Subject,
+  SubSubject,
   EvaluationType,
   AppreciationRule,
   ClassSubjectConfiguration,
-  ClassSubjectEvaluationConfiguration
+  ClassSubjectEvaluationConfiguration,
+  ClassCompetenceItemConfiguration
 } from '../types/markscam';
 
 export const initialSchool: School = {
@@ -108,18 +111,6 @@ export const initialClasses: SchoolClass[] = [
     capacity: 55,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'class-form2-bil',
-    school_id: 'school-gbhs-yaounde',
-    academic_year_id: 'ay-2025-2026',
-    name_en: 'Form 2 Bilingual A',
-    name_fr: '5ème Bilingue A',
-    level: 'Form 2 / 5ème',
-    section: 'Bilingual / Bilingue',
-    capacity: 60,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
   }
 ];
 
@@ -158,105 +149,155 @@ export const initialStudents: Student[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
-  {
-    id: 'std-003',
-    school_id: 'school-gbhs-yaounde',
-    class_id: 'class-form1-bil',
-    admission_number: 'GBHSY/25/003',
-    first_name: 'Fatima',
-    last_name: 'Alhadji',
-    other_names: 'Zouera',
-    gender: 'F',
-    date_of_birth: '2014-02-15',
-    photo_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-    guardian_name: 'Alhadji Musa',
-    guardian_phone: '+237 680 77 88 99',
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
 ];
 
 export const initialCompetences: Competence[] = [
   {
     id: 'comp-1',
     school_id: 'school-gbhs-yaounde',
-    code: 'COMP_INTEL',
-    name_en: 'Intellectual & Cognitive Competence',
-    name_fr: 'Compétence Intellectuelle et Cognitive',
-    description_en: 'Ability to analyze problems, synthesize information, and apply logical reasoning.',
-    description_fr: 'Capacité à analyser des problèmes, synthétiser l’information et appliquer un raisonnement logique.',
+    code: 'C1',
+    name_en: 'Communicate in English, French and one National language',
+    name_fr: 'Communiquer en anglais, en français et dans une langue nationale',
+    description_en: 'Mastery of official and national languages for effective expression.',
+    description_fr: 'Maîtrise des langues officielles et nationales pour une expression efficace.',
     order_index: 1,
     is_active: true,
   },
   {
     id: 'comp-2',
     school_id: 'school-gbhs-yaounde',
-    code: 'COMP_METH',
-    name_en: 'Methodological Competence',
-    name_fr: 'Compétence Méthodologique',
-    description_en: 'Proficiency in working methods, organization, research, and resource management.',
-    description_fr: 'Maîtrise des méthodes de travail, de l\'organisation, de la recherche et de la gestion des ressources.',
+    code: 'C2',
+    name_en: 'Use Basic notions in Mathematics, Science and Technology',
+    name_fr: 'Utiliser les notions de base en mathématiques, sciences et technologie',
+    description_en: 'Application of mathematical reasoning and scientific principles.',
+    description_fr: 'Application du raisonnement mathématique et des principes scientifiques.',
     order_index: 2,
     is_active: true,
   },
   {
     id: 'comp-3',
     school_id: 'school-gbhs-yaounde',
-    code: 'COMP_COMM',
-    name_en: 'Communication & Languages',
-    name_fr: 'Communication et Langues',
-    description_en: 'Expressed mastery in official languages (English and French) and expression mediums.',
-    description_fr: 'Maîtrise exprimée dans les langues officielles (anglais et français) et les supports d\'expression.',
+    code: 'C3',
+    name_en: 'Practice Social and Citizenship Values',
+    name_fr: 'Pratiquer les valeurs sociales et citoyennes',
+    description_en: 'Adherence to moral, civic, and community living standards.',
+    description_fr: 'Adhésion aux normes de vie morale, civique et communautaire.',
     order_index: 3,
     is_active: true,
   },
   {
     id: 'comp-4',
     school_id: 'school-gbhs-yaounde',
-    code: 'COMP_SOC',
-    name_en: 'Social & Civic Competence',
-    name_fr: 'Compétence Sociale et Civique',
-    description_en: 'Respect for community values, teamwork, tolerance, and responsible citizenship.',
-    description_fr: 'Respect des valeurs communautaires, travail en équipe, tolérance et citoyenneté responsable.',
+    code: 'C4',
+    name_en: 'Demonstrate autonomy, spirit of initiative, creativity and Entrepreneurship Values',
+    name_fr: 'Démontrer l\'autonomie, l\'esprit d\'initiative, la créativité et les valeurs d\'entrepreneuriat',
+    description_en: 'Developing self-reliance and vocational enterprise.',
+    description_fr: 'Développement de l\'autonomie et de l\'esprit d\'entreprise.',
     order_index: 4,
     is_active: true,
   },
   {
     id: 'comp-5',
     school_id: 'school-gbhs-yaounde',
-    code: 'COMP_PRAC',
-    name_en: 'Practical & Vocational Competence',
-    name_fr: 'Compétence Pratique et Professionnelle',
-    description_en: 'Hands-on dexterity, technical craftsmanship, and manual execution abilities.',
-    description_fr: 'Dextérité manuelle, savoir-faire technique et aptitudes à l\'exécution manuelle.',
+    code: 'C5',
+    name_en: 'Use Basic concepts and tools in Information and Communication Technologies',
+    name_fr: 'Utiliser les concepts et outils de base des technologies de l\'information et de la communication',
+    description_en: 'Digital literacy and ICT tool utilization.',
+    description_fr: 'Alphabétisation numérique et utilisation des outils TIC.',
     order_index: 5,
     is_active: true,
   },
   {
     id: 'comp-6',
     school_id: 'school-gbhs-yaounde',
-    code: 'COMP_AUTO',
-    name_en: 'Personal Autonomy & Enterprise',
-    name_fr: 'Autonomie Personnelle et Esprit d\'Entreprise',
-    description_en: 'Self-reliance, perseverance, creativity, and initiative in project execution.',
-    description_fr: 'Autonomie, persévérance, créativité et esprit d\'initiative dans la réalisation des projets.',
+    code: 'C6',
+    name_en: 'Practice Physical, Sports, and Artistic activities',
+    name_fr: 'Pratiquer des activités physiques, sportives et artistiques',
+    description_en: 'Physical fitness and artistic expression.',
+    description_fr: 'Condition physique et expression artistique.',
     order_index: 6,
     is_active: true,
   },
 ];
 
+export const initialCompetenceItems: CompetenceItem[] = [
+  // C1
+  { id: 'ci-1a', competence_id: 'comp-1', school_id: 'school-gbhs-yaounde', code: 'C1A', name_en: 'Communicate in English', name_fr: 'Communiquer en anglais', description_en: 'English language proficiency', description_fr: 'Maîtrise de la langue anglaise', order_index: 1, is_active: true },
+  { id: 'ci-1b', competence_id: 'comp-1', school_id: 'school-gbhs-yaounde', code: 'C1B', name_en: 'Communicate in French', name_fr: 'Communiquer en français', description_en: 'French language proficiency', description_fr: 'Maîtrise de la langue française', order_index: 2, is_active: true },
+  { id: 'ci-1c', competence_id: 'comp-1', school_id: 'school-gbhs-yaounde', code: 'C1C', name_en: 'Communicate in one National language', name_fr: 'Communiquer dans une langue nationale', description_en: 'Local language proficiency', description_fr: 'Maîtrise d\'une langue nationale', order_index: 3, is_active: true },
+  
+  // C2
+  { id: 'ci-2a', competence_id: 'comp-2', school_id: 'school-gbhs-yaounde', code: 'C2A', name_en: 'Use Basic notions in Mathematics', name_fr: 'Utiliser les notions de base en mathématiques', description_en: 'Mathematical reasoning', description_fr: 'Raisonnement mathématique', order_index: 1, is_active: true },
+  { id: 'ci-2b', competence_id: 'comp-2', school_id: 'school-gbhs-yaounde', code: 'C2B', name_en: 'Use Basic notions in Science and Technology', name_fr: 'Utiliser les notions de base en sciences et technologie', description_en: 'Scientific inquiry and technology', description_fr: 'Démarche scientifique et technologie', order_index: 2, is_active: true },
+
+  // C3
+  { id: 'ci-3a', competence_id: 'comp-3', school_id: 'school-gbhs-yaounde', code: 'C3A', name_en: 'Practice Social Values', name_fr: 'Pratiquer les valeurs sociales', description_en: 'Social integration values', description_fr: 'Valeurs d\'intégration sociale', order_index: 1, is_active: true },
+  { id: 'ci-3b', competence_id: 'comp-3', school_id: 'school-gbhs-yaounde', code: 'C3B', name_en: 'Practice Citizenship Values', name_fr: 'Pratiquer les valeurs citoyennes', description_en: 'Civic responsibilities', description_fr: 'Devoirs civiques', order_index: 2, is_active: true },
+
+  // C4
+  { id: 'ci-4a', competence_id: 'comp-4', school_id: 'school-gbhs-yaounde', code: 'C4A', name_en: 'Demonstrate autonomy, spirit of initiative, creativity and Entrepreneurship in Vocational Studies', name_fr: 'Démontrer l\'autonomie, l\'esprit d\'initiative, la créativité et l\'entrepreneuriat dans les études professionnelles', description_en: 'Vocational practical skills', description_fr: 'Compétences pratiques professionnelles', order_index: 1, is_active: true },
+  { id: 'ci-4b', competence_id: 'comp-4', school_id: 'school-gbhs-yaounde', code: 'C4B', name_en: 'Demonstrate autonomy, spirit of initiative, creativity and Entrepreneurship', name_fr: 'Démontrer l\'autonomie, l\'esprit d\'initiative, la créativité et l\'entrepreneuriat', description_en: 'Enterprise and initiative', description_fr: 'Esprit d\'entreprise', order_index: 2, is_active: true },
+
+  // C5
+  { id: 'ci-5', competence_id: 'comp-5', school_id: 'school-gbhs-yaounde', code: 'C5', name_en: 'Information and Communication Technology', name_fr: 'Technologies de l\'Information et de la Communication', description_en: 'ICT computer literacy', description_fr: 'Maîtrise informatique', order_index: 1, is_active: true },
+
+  // C6
+  { id: 'ci-6a1', competence_id: 'comp-6', school_id: 'school-gbhs-yaounde', code: 'C6A1', name_en: 'Practice Physical and Sports activities (Physically non-challenged)', name_fr: 'Pratiquer des activités physiques et sportives (valides)', description_en: 'Sports for non-challenged learners', description_fr: 'Sports pour élèves valides', order_index: 1, is_active: true },
+  { id: 'ci-6a2', competence_id: 'comp-6', school_id: 'school-gbhs-yaounde', code: 'C6A2', name_en: 'Practice Physical and Sports activities (Physically challenged)', name_fr: 'Pratiquer des activités physiques et sportives (handicapés physiques)', description_en: 'Adapted sports for challenged learners', description_fr: 'Sports adaptés pour élèves handicapés', order_index: 2, is_active: true },
+  { id: 'ci-6b', competence_id: 'comp-6', school_id: 'school-gbhs-yaounde', code: 'C6B', name_en: 'Practice Artistic activities', name_fr: 'Pratiquer des activités artistiques', description_en: 'Arts and crafts', description_fr: 'Arts plastiques et musicaux', order_index: 3, is_active: true },
+];
+
+export const initialClassCompetenceConfigs: ClassCompetenceItemConfiguration[] = initialCompetenceItems.map((ci, idx) => ({
+  id: `ccic-${idx}`,
+  school_id: 'school-gbhs-yaounde',
+  class_id: 'class-form1-bil',
+  competence_item_id: ci.id,
+  is_active: true,
+  order_index: idx + 1,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+}));
+
 export const initialSubjects: Subject[] = [
-  { id: 'subj-math', school_id: 'school-gbhs-yaounde', code: 'MATH', name_en: 'Mathematics', name_fr: 'Mathématiques', short_name_en: 'Math', short_name_fr: 'Math', order_index: 1, is_active: true, has_sub_subjects: false },
-  { id: 'subj-eng', school_id: 'school-gbhs-yaounde', code: 'ENG', name_en: 'English Language', name_fr: 'Langue Anglaise', short_name_en: 'Eng', short_name_fr: 'Angl', order_index: 2, is_active: true, has_sub_subjects: false },
-  { id: 'subj-fre', school_id: 'school-gbhs-yaounde', code: 'FRE', name_en: 'French Language', name_fr: 'Langue Française', short_name_en: 'Fre', short_name_fr: 'Franç', order_index: 3, is_active: true, has_sub_subjects: false },
-  { id: 'subj-sci', school_id: 'school-gbhs-yaounde', code: 'SCI', name_en: 'Basic Science & Technology', name_fr: 'Sciences et Technologies', short_name_en: 'Science', short_name_fr: 'Sci', order_index: 4, is_active: true, has_sub_subjects: false },
-  { id: 'subj-hist', school_id: 'school-gbhs-yaounde', code: 'HIST', name_en: 'History & Geography', name_fr: 'Histoire et Géographie', short_name_en: 'Hist-Geo', short_name_fr: 'Hist-Géo', order_index: 5, is_active: true, has_sub_subjects: false },
-  { id: 'subj-cit', school_id: 'school-gbhs-yaounde', code: 'CIT', name_en: 'Citizenship & Moral Education', name_fr: 'Éducation Civique et Morale', short_name_en: 'Civics', short_name_fr: 'ECM', order_index: 6, is_active: true, has_sub_subjects: false },
-  { id: 'subj-ict', school_id: 'school-gbhs-yaounde', code: 'ICT', name_en: 'Computer Studies (ICT)', name_fr: 'Informatique (TIC)', short_name_en: 'ICT', short_name_fr: 'Info', order_index: 7, is_active: true, has_sub_subjects: false },
-  { id: 'subj-eps', school_id: 'school-gbhs-yaounde', code: 'EPS', name_en: 'Physical Education & Sports', name_fr: 'Éducation Physique et Sportive', short_name_en: 'PE', short_name_fr: 'EPS', order_index: 8, is_active: true, has_sub_subjects: false },
-  { id: 'subj-arts', school_id: 'school-gbhs-yaounde', code: 'ARTS', name_en: 'Arts & Craft', name_fr: 'Arts Plastiques', short_name_en: 'Arts', short_name_fr: 'Arts', order_index: 9, is_active: true, has_sub_subjects: false },
-  { id: 'subj-rel', school_id: 'school-gbhs-yaounde', code: 'REL', name_en: 'Religious Knowledge', name_fr: 'Instruction Religieuse', short_name_en: 'Rel', short_name_fr: 'Rel', order_index: 10, is_active: true, has_sub_subjects: false },
+  { id: 'subj-eng', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-1a', code: 'ENG', name_en: 'English Language', name_fr: 'Langue Anglaise', short_name_en: 'Eng', short_name_fr: 'Angl', order_index: 1, is_active: true, has_sub_subjects: false },
+  { id: 'subj-fre', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-1b', code: 'FRE', name_en: 'French Language', name_fr: 'Langue Française', short_name_en: 'Fre', short_name_fr: 'Franç', order_index: 2, is_active: true, has_sub_subjects: false },
+  { id: 'subj-nat', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-1c', code: 'NAT', name_en: 'National Language', name_fr: 'Langue Nationale', short_name_en: 'Nat', short_name_fr: 'Nat', order_index: 3, is_active: true, has_sub_subjects: false },
+  { id: 'subj-math', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-2a', code: 'MATH', name_en: 'Mathematics', name_fr: 'Mathématiques', short_name_en: 'Math', short_name_fr: 'Math', order_index: 4, is_active: true, has_sub_subjects: false },
+  { id: 'subj-sci', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-2b', code: 'SCI', name_en: 'General Science & Technology', name_fr: 'Sciences et Technologies', short_name_en: 'Science', short_name_fr: 'Sci', order_index: 5, is_active: true, has_sub_subjects: true },
+  { id: 'subj-hist', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-3a', code: 'HIST', name_en: 'History & Geography', name_fr: 'Histoire et Géographie', short_name_en: 'Hist-Geo', short_name_fr: 'Hist-Géo', order_index: 6, is_active: true, has_sub_subjects: false },
+  { id: 'subj-cit', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-3b', code: 'CIT', name_en: 'Citizenship & Moral Education', name_fr: 'Éducation Civique et Morale', short_name_en: 'Civics', short_name_fr: 'ECM', order_index: 7, is_active: true, has_sub_subjects: false },
+  { id: 'subj-ict', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-5', code: 'ICT', name_en: 'Computer Studies (ICT)', name_fr: 'Informatique (TIC)', short_name_en: 'ICT', short_name_fr: 'Info', order_index: 8, is_active: true, has_sub_subjects: false },
+  { id: 'subj-eps', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-6a1', code: 'EPS', name_en: 'Physical Education & Sports', name_fr: 'Éducation Physique et Sportive', short_name_en: 'PE', short_name_fr: 'EPS', order_index: 9, is_active: true, has_sub_subjects: false },
+  { id: 'subj-arts', school_id: 'school-gbhs-yaounde', competence_item_id: 'ci-6b', code: 'ARTS', name_en: 'Arts & Craft', name_fr: 'Arts Plastiques', short_name_en: 'Arts', short_name_fr: 'Arts', order_index: 10, is_active: true, has_sub_subjects: false },
+];
+
+export const initialSubSubjects: SubSubject[] = [
+  {
+    id: 'sub-bio',
+    subject_id: 'subj-sci',
+    school_id: 'school-gbhs-yaounde',
+    competence_item_id: 'ci-2b',
+    code: 'SCI-BIO',
+    name_en: 'Biology & Geology',
+    name_fr: 'Biologie & Géologie',
+    short_name_en: 'Bio',
+    short_name_fr: 'Bio',
+    order_index: 1,
+    is_active: true,
+  },
+  {
+    id: 'sub-phy',
+    subject_id: 'subj-sci',
+    school_id: 'school-gbhs-yaounde',
+    competence_item_id: 'ci-2b',
+    code: 'SCI-PHY',
+    name_en: 'Physics & Chemistry',
+    name_fr: 'Physique & Chimie',
+    short_name_en: 'Phys',
+    short_name_fr: 'Phys',
+    order_index: 2,
+    is_active: true,
+  },
 ];
 
 export const initialEvaluationTypes: EvaluationType[] = [

@@ -64,8 +64,8 @@ export interface SchoolClass {
   academic_year_id: string;
   name_en: string;
   name_fr: string;
-  level: string; // e.g. Form 1, 6ème, Primary 5, etc.
-  section: string; // e.g. Bilingual, Anglophone, Francophone
+  level: string;
+  section: string;
   capacity: number;
   created_at: string;
   updated_at: string;
@@ -92,7 +92,7 @@ export interface Student {
 export interface Competence {
   id: string;
   school_id: string;
-  code: string;
+  code: string; // C1 to C6
   name_en: string;
   name_fr: string;
   description_en: string;
@@ -101,9 +101,34 @@ export interface Competence {
   is_active: boolean;
 }
 
+export interface CompetenceItem {
+  id: string;
+  competence_id: string;
+  school_id: string;
+  code: string; // C1A, C1B, C1C, C2A, C2B, C3A, C3B, C4A, C4B, C5, C6A1, C6A2, C6B
+  name_en: string;
+  name_fr: string;
+  description_en: string;
+  description_fr: string;
+  order_index: number;
+  is_active: boolean;
+}
+
+export interface ClassCompetenceItemConfiguration {
+  id: string;
+  school_id: string;
+  class_id: string;
+  competence_item_id: string;
+  is_active: boolean;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Subject {
   id: string;
   school_id: string;
+  competence_item_id: string;
   code: string;
   name_en: string;
   name_fr: string;
@@ -118,6 +143,7 @@ export interface SubSubject {
   id: string;
   subject_id: string;
   school_id: string;
+  competence_item_id: string;
   code: string;
   name_en: string;
   name_fr: string;
@@ -143,7 +169,7 @@ export interface ClassSubjectConfiguration {
   school_id: string;
   class_id: string;
   subject_id: string;
-  max_mark: number;
+  max_mark: number; // monthly total max mark (derived or configured)
   is_active: boolean;
   order_index: number;
 }
@@ -152,7 +178,7 @@ export interface ClassSubjectEvaluationConfiguration {
   id: string;
   class_subject_configuration_id: string;
   evaluation_type_id: string;
-  max_mark: number;
+  max_mark: number; // e.g., oral=5, written=10, practical=3, attitude=2
   is_enabled: boolean;
   is_required: boolean;
 }

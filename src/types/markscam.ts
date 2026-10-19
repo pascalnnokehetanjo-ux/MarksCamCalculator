@@ -194,3 +194,244 @@ export interface AppreciationRule {
   order_index: number;
   is_active: boolean;
 }
+export type MarkStatus = 'draft' | 'verified' | 'locked';
+export type MarkSource = 'manual' | 'ocr';
+
+export interface StudentMark {
+  id: string;
+  school_id: string;
+  class_id: string;
+  student_id: string;
+  academic_year_id: string;
+  term_id: string;
+  month_id: string;
+  competence_item_id: string;
+  subject_id?: string;
+  sub_subject_id?: string;
+  evaluation_type_id: string;
+  score: number;
+  max_mark: number;
+  entered_by: string;
+  verified_by?: string;
+  verified_at?: string;
+  status: MarkStatus;
+  source: MarkSource;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MonthlyResult {
+  id: string;
+  school_id: string;
+  academic_year_id: string;
+  term_id: string;
+  month_id: string;
+  class_id: string;
+  student_id: string;
+  competence_id?: string;
+  competence_item_id?: string;
+  subject_id?: string;
+  sub_subject_id?: string;
+  score: number;
+  max_mark: number;
+  percentage: number;
+  appreciation_en: string;
+  appreciation_fr: string;
+  grade: string;
+  average_out_of_20?: number;
+  class_rank?: number;
+  class_size?: number;
+  calculated_at: string;
+}
+
+export interface TermlyResult {
+  id: string;
+  school_id: string;
+  academic_year_id: string;
+  term_id: string;
+  class_id: string;
+  student_id: string;
+  subject_id?: string;
+  sub_subject_id?: string;
+  term_score: number;
+  term_max_mark: number;
+  term_percentage: number;
+  appreciation_en: string;
+  appreciation_fr: string;
+  grade: string;
+  term_average_out_of_20?: number;
+  calculated_at: string;
+}
+
+export interface AnnualResult {
+  id: string;
+  school_id: string;
+  academic_year_id: string;
+  class_id: string;
+  student_id: string;
+  term1_average: number;
+  term2_average: number;
+  term3_average: number;
+  annual_average_out_of_20: number;
+  appreciation_en: string;
+  appreciation_fr: string;
+  grade: string;
+  class_rank?: number;
+  class_size?: number;
+  calculated_at: string;
+}
+export type PhotoStatus = 'uploaded' | 'processing' | 'extracted' | 'needs_review' | 'verified' | 'rejected' | 'failed';
+export type MatchStatus = 'matched' | 'unmatched' | 'ambiguous' | 'low_confidence';
+export type VerificationSessionStatus = 'in_progress' | 'submitted' | 'approved' | 'rejected';
+
+export interface MarksheetPhoto {
+  id: string;
+  school_id: string;
+  academic_year_id: string;
+  term_id: string;
+  month_id: string;
+  class_id: string;
+  subject_id?: string;
+  sub_subject_id?: string;
+  competence_item_id?: string;
+  evaluation_type_id?: string;
+  uploaded_by: string;
+  original_file_path: string;
+  processed_file_path?: string;
+  file_name: string;
+  file_size: number;
+  mime_type: string;
+  page_number: number;
+  total_pages: number;
+  status: PhotoStatus;
+  ocr_provider: string;
+  error_message?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OcrExtraction {
+  id: string;
+  marksheet_photo_id: string;
+  school_id: string;
+  row_index: number;
+  column_index: number;
+  raw_text: string;
+  normalized_text: string;
+  cell_type: 'student_name' | 'admission_number' | 'subject' | 'evaluation_type' | 'max_mark' | 'score' | 'unknown';
+  confidence: number;
+  matched_student_id?: string;
+  matched_subject_id?: string;
+  matched_evaluation_type_id?: string;
+  match_status: MatchStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OcrVerificationSession {
+  id: string;
+  marksheet_photo_id: string;
+  school_id: string;
+  started_by: string;
+  submitted_by?: string;
+  approved_by?: string;
+  status: VerificationSessionStatus;
+  correction_count: number;
+  started_at: string;
+  submitted_at?: string;
+  approved_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OcrTransferLog {
+  id: string;
+  school_id: string;
+  marksheet_photo_id: string;
+  verification_session_id: string;
+  class_id: string;
+  month_id: string;
+  marks_created: number;
+  marks_updated: number;
+  duplicates_prevented: number;
+  invalid_cells_rejected: number;
+  students_affected: number;
+  transferred_by: string;
+  transferred_at: string;
+  created_at: string;
+}
+export type RecommendationType =
+  | 'low_performance'
+  | 'declining_performance'
+  | 'improving_performance'
+  | 'strong_performance'
+  | 'inconsistent_performance'
+  | 'subject_specific_weakness'
+  | 'competence_specific_weakness'
+  | 'missing_mandatory_marks'
+  | 'missing_optional_evaluation'
+  | 'incomplete_monthly_result'
+  | 'incomplete_term_result'
+  | 'class_wide_decline'
+  | 'class_wide_improvement'
+  | 'assessment_gap'
+  | 'custom_teacher_recommendation';
+
+export type RecommendationSeverity = 'info' | 'warning' | 'critical';
+export type RecommendationStatus = 'open' | 'accepted' | 'edited' | 'dismissed' | 'converted_to_action';
+
+export interface Recommendation {
+  id: string;
+  school_id: string;
+  academic_year_id: string;
+  term_id?: string;
+  month_id?: string;
+  class_id: string;
+  student_id?: string;
+  subject_id?: string;
+  competence_id?: string;
+  recommendation_type: RecommendationType;
+  severity: RecommendationSeverity;
+  title_en: string;
+  title_fr: string;
+  evidence_json: string;
+  trigger_rule: string;
+  recommendation_en: string;
+  recommendation_fr: string;
+  ai_generated: boolean;
+  status: RecommendationStatus;
+  created_by: 'system' | 'teacher' | 'school_admin';
+  created_at: string;
+  updated_at: string;
+  resolved_at?: string;
+}
+
+export type ActionType = 'remediation' | 'enrichment' | 'parent_meeting' | 'assessment_review' | 'teaching_review' | 'counseling' | 'custom';
+export type ActionPriority = 'low' | 'medium' | 'high';
+export type ActionStatus = 'open' | 'in_progress' | 'completed' | 'cancelled';
+
+export interface ActionPlan {
+  id: string;
+  school_id: string;
+  academic_year_id: string;
+  term_id?: string;
+  month_id?: string;
+  class_id: string;
+  student_id?: string;
+  recommendation_id?: string;
+  title_en: string;
+  title_fr: string;
+  description_en: string;
+  description_fr: string;
+  action_type: ActionType;
+  priority: ActionPriority;
+  due_date?: string;
+  assigned_to?: string;
+  status: ActionStatus;
+  outcome_en?: string;
+  outcome_fr?: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  completed_at?: string;
+}

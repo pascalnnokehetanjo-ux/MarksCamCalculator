@@ -1,5 +1,5 @@
 -- ====================================================================
--- MARKSCAM POSTGRESQL / SUPABASE PHASE 2 SCHEMA MIGRATION
+-- MARKSCAM POSTGRESQL / SUPABASE PHASE 3 FULL SCHEMA MIGRATION
 -- ====================================================================
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -121,7 +121,7 @@ CREATE TABLE competence_items (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     competence_id UUID NOT NULL REFERENCES competences(id) ON DELETE CASCADE,
     school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
-    code VARCHAR(50) NOT NULL, -- C1A, C1B, C1C, C2A, C2B, C3A, C3B, C4A, C4B, C5, C6A1, C6A2, C6B
+    code VARCHAR(50) NOT NULL, -- C1A, C1B, etc.
     name_en VARCHAR(255) NOT NULL,
     name_fr VARCHAR(255) NOT NULL,
     description_en TEXT,
@@ -197,4 +197,72 @@ CREATE TABLE appreciation_rules (
     grade VARCHAR(10) NOT NULL,
     order_index INT NOT NULL,
     is_active BOOLEAN DEFAULT TRUE
+);
+
+-- 15. STUDENT MARKS
+CREATE TYPE mark_status AS ENUM ('draft', 'verified', 'locked');
+CREATE TYPE mark_source AS ENUM ('manual', 'ocr');
+
+CREATE TABLE student_marks (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    class_id UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    academic_year_id UUID NOT NULL REFERENCES academic_years(id) ON DELETE CASCADE,
+    term_id UUID NOT NULL REFERENCES terms(id) ON DELETE CASCADE,
+    month_id UUID NOT NULL REFERENCES months(id) ON DELETE CASCADE,
+    competence_item_id UUID NOT NULL REFERENCES competence_items(id) ON DELETE CASCADE,
+    subject_id UUID REFERENCES subjects(id) ON DELETE CASCADE,
+    sub_subject_id UUID REFERENCES sub_subjects(id) ON DELETE CASCADE,
+    evaluation_type_id UUID NOT NULL REFERENCES evaluation_types(id) ON DELETE CASCADE,
+    score DECIMAL(5,2) NOT NULL,
+    max_mark DECIMAL(5,2) NOT NULL,
+    entered_by UUID NOT NULL,
+    verified_by UUID,
+    verified_at TIMESTAMP WITH TIME ZONE,
+    status mark_status DEFAULT 'draft',
+    source mark_source DEFAULT 'manual',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 16. MONTHLY RESULTS & SUMMARIES
+CREATE TABLE monthly_results (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    academic_year_id UUID NOT NULL REFERENCES academic_years(id) ON DELETE CASCADE,
+    term_id UUID NOT NULL REFERENCES terms(id) ON DELETE CASCADE,
+    month_id UUID NOT NULL REFERENCES months(id) ON DELETE CASCADE,
+    class_id UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    competence_id UUID REFERENCES competences(id) ON DELETE CASCADE,
+    competence_item_id UUID REFERENCES competence_items(id) ON DELETE CASCADE,
+    subject_id UUID REFERENCES subjects(id) ON DELETE CASCADE,
+    sub_subject_id UUID REFERENCES sub_subjects(id) ON DELETE CASCADE,
+    score DECIMAL(5,2) NOT NULL,
+    max_mark DECIMAL(5,2) NOT NULL,
+    percentage DECIMAL(5,2) NOT NULL,
+    appreciation_en VARCHAR(255) NOT NULL,
+    appreciation_fr VARCHAR(255) NOT NULL,
+    grade VARCHAR(10) NOT NULL,
+    calculated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE student_monthly_summaries (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    academic_year_id UUID NOT NULL REFERENCES academic_years(id) ON DELETE CASCADE,
+    term_id UUID NOT NULL REFERENCES terms(id) ON DELETE CASCADE,
+    month_id UUID NOT NULL REFERENCES months(id) ON DELETE CASCADE,
+    class_id UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    total_score DECIMAL(6,2) NOT NULL,
+    total_max_mark DECIMAL(6,2) NOT NULL,
+    average_out_of_20 DECIMAL(4,2) NOT NULL,
+    appreciation_en VARCHAR(255) NOT NULL,
+    appreciation_fr VARCHAR(255) NOT NULL,
+    grade VARCHAR(10) NOT NULL,
+    class_rank INT,
+    class_size INT,
+    calculated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

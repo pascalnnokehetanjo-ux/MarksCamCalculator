@@ -14,14 +14,29 @@ import {
   CheckCircle,
   ChevronRight,
   BarChart3,
-  ListTree
+  ListTree,
+  FileText,
+  TrendingUp,
+  Edit3,
+  Camera,
+  AlertCircle,
+  Sparkles,
+  CheckSquare2
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
   const { activeTab, setActiveTab, language } = useApp();
 
   const menuItems = [
+    { id: 'onboarding', labelEn: 'School Onboarding Wizard', labelFr: 'Assistant d\'Intégration', labelHa: 'Saitin Farko', icon: Sparkles },
+    { id: 'checklist', labelEn: 'Pilot Readiness Checklist', labelFr: 'Liste de Contrôle Pilote', labelHa: 'Binciken Shiri', icon: CheckSquare2 },
     { id: 'profile', labelEn: 'School Profile', labelFr: 'Profil de l\'École', labelHa: 'Bayanin Makaranta', icon: Building2 },
+    { id: 'analytics', labelEn: 'Analytics & Dashboards', labelFr: 'Analyses & Tableaux de Bord', labelHa: 'Bincike', icon: TrendingUp },
+    { id: 'recommendations', labelEn: 'Recommendations & Actions', labelFr: 'Recommandations & Actions', labelHa: 'Shawara', icon: AlertCircle },
+    { id: 'ocr', labelEn: 'Marksheet OCR & Upload', labelFr: 'Relevés OCR & Photos', labelHa: 'Hotunan Jarrabawa', icon: Camera },
+    { id: 'marks', labelEn: 'Manual Marks Entry', labelFr: 'Saisie des Notes', labelHa: 'Shigar da Mako', icon: Edit3 },
+    { id: 'results', labelEn: 'Deterministic Calculations', labelFr: 'Calculs & Résultats', labelHa: 'Lissafin Sakamako', icon: BarChart3 },
+    { id: 'reports', labelEn: 'Report Cards & PDFs', labelFr: 'Bulletins & PDFs', labelHa: 'Rahoton Makaranta', icon: FileText },
     { id: 'hierarchy', labelEn: 'Competence Hierarchy (C1-C6)', labelFr: 'Hiérarchie des Compétences', labelHa: 'Tsarin Kwarewa', icon: ListTree },
     { id: 'subjects', labelEn: 'Subjects & Sub-Subjects', labelFr: 'Matières & Sous-Matières', labelHa: 'Darussa', icon: BookOpen },
     { id: 'classconfigs', labelEn: 'Class Assessment Structure', labelFr: 'Structure d\'Évaluation par Classe', labelHa: 'Saitin Ajujuwa', icon: Layers },

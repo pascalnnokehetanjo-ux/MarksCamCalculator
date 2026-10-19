@@ -1,0 +1,6 @@
+{
+  "name": "MarksCam - Cameroonian School Assessment SaaS",
+  "description": "Bilingual Cameroonian school assessment SaaS foundation supporting English and French, multi-tenancy, classes, students, subjects, evaluation types, and appreciation rules.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
